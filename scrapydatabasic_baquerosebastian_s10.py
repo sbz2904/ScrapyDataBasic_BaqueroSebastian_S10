@@ -29,22 +29,16 @@ def processTableData(tbl):
 url = 'https://es.wikipedia.org/wiki/Anexo:Tabla_histórica_de_la_Copa_Libertadores'
 response = requests.get(url)
 
-# Verificar que la solicitud fue exitosa
 if response.status_code == 200:
-    soup = bs(response.content, 'html.parser')  # Procesa el HTML con BeautifulSoup
-
-    # Encuentra la tabla correcta (puede que necesites ajustar el índice)
+    soup = bs(response.content, 'html.parser')
     table = soup.find_all('table')[0]  # Ajustar el índice si es necesario
-
     # Extraer los datos de la tabla y convertirlos en un DataFrame
     table_data = processTableData(table)
     df = pd.DataFrame(table_data[1:], columns=table_data[0])  # Usa la primera fila como encabezado
-
-    # Limpieza de datos y conversión de tipos si es necesario
-
+    
     # Presentación de la tabla en consola
     print("Tabla de Copas Libertadores:")
-    print(tabulate(df.head(20), headers='keys', tablefmt='fancy_grid', showindex=False))  # Muestra las primeras 20 filas de la tabla
+    print(tabulate(df.head(20), headers='keys', tablefmt='fancy_grid', showindex=False))
 
     # Guardar en un archivo CSV
     df.to_csv('copaLibertadores.csv', index=False)
